@@ -1,10 +1,13 @@
-import React from 'react';
+import React, {useContext} from 'react';
 import {StyleSheet, Text, TouchableOpacity, View} from 'react-native';
+import {AppContext} from '../context/AppContext';
 
-const MockLanding = ({invoiceHandler}) => {
+const MockLanding = () => {
+  const {setInvoice} = useContext(AppContext);
+
   return (
     <View>
-      <TouchableOpacity style={styles.button} onPress={invoiceHandler}>
+      <TouchableOpacity style={styles.button} onPress={() => setInvoice(true)}>
         <Text style={styles.buttonTitle}>{'Start'}</Text>
       </TouchableOpacity>
     </View>

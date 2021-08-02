@@ -1,22 +1,26 @@
-import React from 'react';
-import {
-  View,
-  Text,
-  StyleSheet,
-  TouchableOpacity,
-  Dimensions,
-} from 'react-native';
+import React, {useContext} from 'react';
+import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
+import {AppContext} from '../../context/AppContext';
 
-const StepFooter = ({currentStep, steps, setCurrentStep, invoiceHandler}) => {
+const StepFooter = ({currentStep, steps, setCurrentStep}) => {
+  const {setInvoice, invoice} = useContext(AppContext);
+
   const next = () => {
     setCurrentStep(currentStep >= steps.length ? currentStep : currentStep + 1);
   };
 
+  const stepHandler = () => {
+    if (currentStep === steps.length && invoice) {
+      setInvoice(false);
+      setCurrentStep(1);
+    } else {
+      next();
+    }
+  };
+
   return (
     <View style={styles.container}>
-      <TouchableOpacity
-        style={styles.button}
-        onPress={currentStep === steps.length ? invoiceHandler : next}>
+      <TouchableOpacity style={styles.button} onPress={() => stepHandler()}>
         <Text style={styles.buttonTitle}>
           {currentStep === steps.length ? 'Confirm' : 'Next'}
         </Text>
@@ -35,18 +39,9 @@ const styles = StyleSheet.create({
     borderTopWidth: 1,
     position: 'relative',
   },
-  overlay: {
-    width: '100%',
-    height: '100%',
-    backgroundColor: 'rgba(172, 191, 177, 0.5)',
-    position: 'absolute',
-    top: 0,
-    bottom: 0,
-    zIndex: 20,
-  },
   button: {
+    flex: 1,
     backgroundColor: '#34c759',
-    width: Dimensions.get('screen').width - 32,
     borderRadius: 8,
     justifyContent: 'center',
     flexDirection: 'row',

@@ -8,26 +8,18 @@
  * @format
  */
 
-import React, {useState} from 'react';
+import React, {useContext, useState} from 'react';
 import {StyleSheet, View, Dimensions} from 'react-native';
 import Payment from './src/screen/Payment';
-import MockLanding from './src/screen/MockLanding';
+import {AppProvider} from './src/context/AppContext';
 
 const App = () => {
-  const [invoice, setInvoice] = useState(false);
-
-  const invoiceHandler = React.useCallback(() => {
-    setInvoice(i => !i);
-  }, []);
-
   return (
-    <View style={styles.container}>
-      {invoice ? (
-        <Payment invoiceHandler={invoiceHandler} />
-      ) : (
-        <MockLanding invoiceHandler={invoiceHandler} />
-      )}
-    </View>
+    <AppProvider>
+      <View style={styles.container}>
+        <Payment />
+      </View>
+    </AppProvider>
   );
 };
 
@@ -37,7 +29,6 @@ const styles = StyleSheet.create({
     backgroundColor: '#f2f2f7',
     alignItems: 'center',
     justifyContent: 'center',
-    width: Dimensions.get('window').width,
     paddingVertical: 40,
   },
 });

@@ -1,6 +1,7 @@
-import React, {useEffect, useState} from 'react';
-import {Platform, StyleSheet, Text, View} from 'react-native';
+import React, {useContext, useEffect, useState} from 'react';
+import {Platform, StyleSheet, Text, TouchableOpacity, View} from 'react-native';
 import CheckBox from '@react-native-community/checkbox';
+import {AppContext} from '../context/AppContext';
 
 const mockdata = [
   {
@@ -20,7 +21,7 @@ const mockdata = [
   },
 ];
 const Payments = () => {
-  const [checked, setChecked] = useState({});
+  const {checked, setChecked} = useContext(AppContext);
 
   return (
     <View style={styles.container}>
@@ -29,24 +30,16 @@ const Payments = () => {
         return (
           <View style={styles.paymentOptionsWrapper} key={option.id}>
             <View style={styles.checkBoxWrapper}>
-              {Platform.OS === 'ios' ? (
-                <CheckBox
-                  onCheckColor={'#34c759'}
-                  onTintColor={'#34c759'}
-                  boxType="square"
-                  value={checked[option.id]}
-                  onValueChange={newValue => {
-                    setChecked({[option.id]: newValue});
-                  }}
+              <TouchableOpacity onPress={() => setChecked(option.id)}>
+                <View
+                  style={[
+                    styles.checkBox,
+                    {
+                      backgroundColor: checked === option.id ? 'pink' : 'white',
+                    },
+                  ]}
                 />
-              ) : (
-                <CheckBox
-                  value={checked[option.id]}
-                  onValueChange={newValue => {
-                    setChecked({[option.id]: newValue});
-                  }}
-                />
-              )}
+              </TouchableOpacity>
             </View>
             <View style={styles.optionTextWrapper}>
               <Text style={styles.optionTitle}>{option.title}</Text>
@@ -68,6 +61,14 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     paddingHorizontal: 16,
     paddingVertical: 32,
+  },
+  checkBox: {
+    width: 40,
+    height: 40,
+    borderRadius: 8,
+    borderColor: '#34c759',
+    borderWidth: 2,
+    backgroundColor: '#fff',
   },
   title: {
     color: '#34c759',
